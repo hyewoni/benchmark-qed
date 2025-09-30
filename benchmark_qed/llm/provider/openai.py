@@ -90,6 +90,7 @@ class OpenAIChat(BaseOpenAIChat):
     def __init__(self, llm_config: LLMConfig) -> None:
         self._client = AsyncOpenAI(
             api_key=llm_config.api_key.get_secret_value(),
+            base_url=llm_config.base_url,
             **llm_config.init_args,
         )
 
@@ -169,6 +170,7 @@ class OpenAIEmbedding(BaseOpenAIEmbedding):
     def __init__(self, llm_config: LLMConfig) -> None:
         self._client = AsyncOpenAI(
             api_key=llm_config.api_key.get_secret_value(),
+            base_url=llm_config.embedding_base_url,
             **llm_config.init_args,
         )
 

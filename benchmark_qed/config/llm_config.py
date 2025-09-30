@@ -69,6 +69,22 @@ class LLMConfig(BaseModel):
         default=SecretStr(os.environ.get("OPENAI_API_KEY", "")),
         description="The API key to use for the model. This should be a valid API key.",
     )
+    chat_model: str = Field(
+        default=os.environ.get("OPENAI_CHAT_MODEL_NAME", ""),
+        description="Whether the model is a chat model. If False, the model is assumed to be a completion model.",
+    )
+    embedding_model: bool = Field(
+        default=False,
+        description="Whether the model is an embedding model. If False, the model is assumed to be a completion or chat model.",
+    )
+    base_url: str = Field(
+        default=os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+        description="The base URL for the OpenAI API endpoint.",
+    )
+    embedding_base_url: str = Field(
+        default=os.environ.get("OPENAI_EMBEDDING_BASE_URL", "https://api.openai.com/v1"),
+        description="The base URL for the OpenAI Embedding API endpoint.",
+    )
     concurrent_requests: int = Field(
         default=4,
         description="The number of concurrent requests to send to the model. This should be a positive integer.",
