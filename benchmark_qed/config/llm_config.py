@@ -58,7 +58,7 @@ class LLMConfig(BaseModel):
     """Configuration for the LLM to use."""
 
     model: str = Field(
-        default="gpt-4.1",
+        default=os.environ.get("OPENAI_CHAT_MODEL", "gpt-4.1"),
         description="The name of the model to use for scoring. This should be a valid model name.",
     )
     auth_type: AuthType = Field(
@@ -68,6 +68,23 @@ class LLMConfig(BaseModel):
     api_key: SecretStr = Field(
         default=SecretStr(os.environ.get("OPENAI_API_KEY", "")),
         description="The API key to use for the model. This should be a valid API key.",
+    )
+
+    embedding_model: bool = Field(
+        default=False,
+        description="Whether the model is an embedding model. If False, the model is assumed to be a completion or chat model.",
+    )
+    base_url: str = Field(
+        default=os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+        description="The base URL for the OpenAI API endpoint.",
+    )
+    embedding_base_url: str = Field(
+        default=os.environ.get("OPENAI_EMBEDDING_BASE_URL", "https://api.openai.com/v1"),
+        description="The base URL for the OpenAI Embedding API endpoint.",
+    )
+    embedding_model: str = Field(
+        default=os.environ.get("OPENAI_EMBEDDING_MODEL", "text-embedding-3-large"),
+        description="The name of the embedding model to use.",
     )
     concurrent_requests: int = Field(
         default=4,

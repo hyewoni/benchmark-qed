@@ -41,9 +41,10 @@ class ConfigType(StrEnum):
 
 
 CHAT_MODEL_DEFAULTS = """
-  model: gpt-4.1
+  model: ${OPENAI_CHAT_MODEL} # OpenAI Chat model (default: gpt-4.1)
   auth_type: api_key # or azure_managed_identity
   api_key: ${OPENAI_API_KEY} # remove this if using azure_managed_identity
+  base_url: ${OPENAI_BASE_URL} # OpenAI Chat API endpoint (default: https://api.openai.com/v1)
   llm_provider: openai.chat # or azure.openai.chat | azure.inference.chat
   concurrent_requests: 4 # The number of concurrent requests to send to the model.
   # init_args:
@@ -63,9 +64,10 @@ CHAT_MODEL_DEFAULTS = """
   #     model_class: CustomChatModel"""
 
 EMBEDDING_MODEL_DEFAULTS = """
-  model: text-embedding-3-large
+  model: ${OPENAI_EMBEDDING_MODEL} # OpenAI Embedding model (default: text-embedding-3-large)
   auth_type: api_key # or azure_managed_identity
   api_key: ${OPENAI_API_KEY} # remove this if using azure_managed_identity
+  embedding_base_url: ${OPENAI_EMBEDDING_BASE_URL} # OpenAI Embedding API endpoint (default: https://api.openai.com/v1)
   llm_provider: openai.embedding # or azure.openai.embedding | azure.inference.embedding
   # init_args:
   #   Additional initialization arguments for the LLM can be added here.
@@ -332,7 +334,10 @@ def init(
 
     env_file = root / ".env"
     if not env_file.exists():
-        env_file.write_text("OPENAI_API_KEY=<API_KEY>", encoding="utf-8")
+        env_file.write_text("OPENAI_API_KEY=<API_KEY>\nOPENAI_CHAT_MODEL=gpt-4.1\nOPENAI_EMBEDDING_MODEL=text-embedding-3-large\nOPENAI_BASE_URL=https://api.openai.com/v1\nOPENAI_EMBEDDING_BASE_URL=https://api.openai.com/v1", encoding="utf-8")
     typer.echo(
         f"Change the OPENAI_API_KEY placeholder at {env_file} with your actual OPENAI_API_KEY."
+    )
+    typer.echo(
+        f"Optionally change the model names and base URLs at {env_file} to use custom models and endpoints."
     )

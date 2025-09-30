@@ -90,6 +90,7 @@ class OpenAIChat(BaseOpenAIChat):
     def __init__(self, llm_config: LLMConfig) -> None:
         self._client = AsyncOpenAI(
             api_key=llm_config.api_key.get_secret_value(),
+            base_url=llm_config.base_url,
             **llm_config.init_args,
         )
 
@@ -131,9 +132,9 @@ class BaseOpenAIEmbedding:
         self, client: AsyncOpenAI | AsyncAzureOpenAI, llm_config: LLMConfig
     ) -> None:
         self._client = client
-        self._model = llm_config.model
+        self._model = llm_config.embedding_model
         self._semaphore = asyncio.Semaphore(llm_config.concurrent_requests)
-        self._usage = Usage(model=llm_config.model)
+        self._usage = Usage(model=llm_config.embedding_model)
 
     def get_usage(self) -> dict[str, Any]:
         """Get the usage of the Model."""
@@ -169,6 +170,7 @@ class OpenAIEmbedding(BaseOpenAIEmbedding):
     def __init__(self, llm_config: LLMConfig) -> None:
         self._client = AsyncOpenAI(
             api_key=llm_config.api_key.get_secret_value(),
+            base_url=llm_config.embedding_base_url,
             **llm_config.init_args,
         )
 

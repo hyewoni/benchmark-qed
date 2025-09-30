@@ -395,6 +395,7 @@ def autoq(
 
     text_embedder = TextEmbedder(embedding_model)
     chat_model = ModelFactory.create_chat_model(config.chat_model)
+    embedding_model = ModelFactory.create_embedding_model(config.embedding_model)
     token_encoder = tiktoken.get_encoding(config.encoding.model_name)
     loop = asyncio.get_event_loop()
 
